@@ -1,4 +1,6 @@
-
+# Deploy containers related to the EVIDENCE project 
+- Später muss dass alles durch IaC ersetzt werden (z.B. Ansible) -> Dies ist kein Production Code!
+- Die Bash-Skripte sind ganz nett um local die Container zu starten -> Es ist nur Dev code!
 
 ## Install
 
