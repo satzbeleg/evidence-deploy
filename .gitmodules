@@ -1,0 +1,9 @@
+[submodule "restapi"]
+	path = restapi
+	url = git@github.com:ulf1/fastapi-evidence-restapi.git
+[submodule "database"]
+	path = database
+	url = git@github.com:ulf1/psql-evidence-database.git
+[submodule "webapp"]
+	path = webapp
+	url = git@github.com:ulf1/vue-evidence-app.git
