@@ -10,6 +10,8 @@ und hier als submodules eingebunden.
 ```sh
 # Clone the master repo
 git clone git@github.com:ulf1/deploy-evidence.git
+# go to folder
+cd deploy-evidence
 # Install given submodules
 git submodule update --init --recursive
 ```
