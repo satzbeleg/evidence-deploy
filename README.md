@@ -56,6 +56,36 @@ bash run.sh -d
 ```
 
 
+## IPs und Ports
+
+
+| Container | Internal IP | Internal Port | Host Port |
+|:---------:|:-----------:|:-------------:|:---------:|
+| `evidence-database` | `172.20.253.5` | `5432` | `55015` |
+| `evidence-pgadmin4` | `172.20.253.6` | `80` | `55016` |
+| `evidence-restapi`  | `172.20.253.7` | `80` | `55017` |
+| `evidence-app`      | `172.20.253.17` | `8080` | `55018` |
+
+
+Internal Port Ranges `evidence-backend-network`
+
+- Internal Port Range `172.20.253.0/28`
+    - Network address: `172.20.253.0`
+    - Broadcast: `172.20.253.15`
+    - Usable: `172.20.253.1-14` (14x)
+- Dynamisch: `172.20.253.8/29`
+- Statisch: `172.20.253.1-7` (7x)
+
+Internal Port Ranges `evidence-frontend-network`
+
+- Internal Port Range `172.20.253.16/29`
+    - Network address: `172.20.253.16`
+    - Broadcast: `172.20.253.23`
+    - Usable: `172.20.253.17-22` (6x)
+- Dynamisch: `172.20.253.20/30` 
+- Statisch: `172.20.253.17-19` (3x)
+
+
 ## Anhang
 
 ### Git submodule

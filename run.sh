@@ -37,6 +37,9 @@ if [ "$delete_flag" = true ]; then
     docker rm -vf $(docker ps -a --no-trunc --filter="name=evidence-" -q)
     # delete "evidence-* images
     docker rmi -f $(docker images --format '{{.Repository}}:{{.Tag}}' | grep evidence-)
+    # delete networks
+    docker network rm evidence-backend-network
+    docker network rm evidence-frontend-network
     # tidy up dangling images (general housekeeping)
     docker rmi $(docker images -f "dangling=true" -q)
 fi
@@ -45,9 +48,37 @@ fi
 # Backend Container
 if [ "$backend_flag" = true ]; then
     # Erzeuge Docker Network
+    if [[ $(docker network ls | grep "evidence-backend-network" | wc -l) -eq 0 ]];
+    then
+        docker network create --driver bridge \
+            --subnet=172.20.253.0/28 \
+            --ip-range=172.20.253.8/29 \
+            evidence-backend-network
+    fi
 
     # Starte Backend Container
     folders=(database restapi)
+    for folder in ${folders[@]}; do
+        nohup docker-compose \
+            -f "./${folder}/docker-compose.yml" \
+            up --build >/dev/null 2>&1 &
+    done
+fi
+
+
+# Frontend Container
+if [ "$frontend_flag" = true ]; then
+    # Erzeuge Docker Network
+    if [[ $(docker network ls | grep "evidence-backend-network" | wc -l) -eq 0 ]];
+    then
+        docker network create --driver bridge \
+            --subnet=172.20.253.16/29 \
+            --ip-range=172.20.253.20/30 \
+            evidence-frontend-network
+    fi
+
+    # Starte Frontend Container
+    folders=(webapp)
     for folder in ${folders[@]}; do
         nohup docker-compose \
             -f "./${folder}/docker-compose.yml" \
