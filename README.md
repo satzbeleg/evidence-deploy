@@ -1,11 +1,8 @@
-# Deploy containers related to the EVIDENCE project 
-- Später muss dass alles durch IaC ersetzt werden (z.B. Ansible) -> Dies ist kein Production Code!
-- Die Bash-Skripte sind ganz nett um local die Container zu starten -> Es ist nur Dev code!
+# EVIDENCE project - Deploy Container
 
 
-## Install
-Die EVIDENCE-Subsysteme (z.B. API, DB, App, Modell) werden in seperaten Repos entwickelt, 
-und hier als submodules eingebunden.
+## Installation
+Die EVIDENCE-Subsysteme (z.B. API, DB, App, Modell) werden in separaten Repositorien entwickelt, und hier als submodules eingebunden.
 
 ```sh
 # Clone the master repo
@@ -17,29 +14,56 @@ git submodule update --init --recursive
 ```
 
 
-## Starte die Container
-Das Skript `start.sh` baut und startet die Container als Hintergrundprozess.
-In der CLI kann wird `docker ps` im Livemodus angezeigt.
+## Starte, Stoppe und Lösche Container
+**TODO**: Ersetze die `run.sh` und `docker-compose` später durch Ansible (IaC).
 
-```sh
-bash start.sh
+
+### Starte DEV Mode
+Das Skript `start.sh` baut und startet die Backend Container (`-b` flag) und Frontend Container (`-f` flag) als Hintergrundprozess.
+In der CLI kann wird `docker ps` im Livemodus angezeigt (`-w` flag).
+
+```bash
+bash run.sh -b -f -w
 ```
 
 Durch Drücken der `[Ctrl+C]` Tastenkombination werden die Container beendet. 
-(Zumindestens sollte es so ein. Bitte checke mit dem `docker ps -a` Befehl.)
+(Bitte checke mit dem `docker ps -a` Befehl.)
 
 
-## Aufräumen
+### Starte Production Mode
+Für den Betrieb sollten die Container einfach gestartet werden.
+
+```bash
+bash run.sh -b -f
+```
+
+
+### Stoppe Container
+Alle Container mit dem Namen `"evidence-*"` werden angehalten.
+(Es wird das Programm `docker` statt `docker-compose` benutzt.)
+
+```bash
+bash run.sh -s
+```
+
+
+### Lösche Container und Images (Tabula Rasa)
 Das Skript `delete.sh` löscht alle `"evidence-*"` Container und auch Images.
+Die Daten (z.B. in Datenbanken) werden ebenfalls gelöscht.
+
+```bash
+bash run.sh -d
+```
 
 
-## git submodules
+## Anhang
 
-### Add another submodule
+### Git submodule
+Ein Git submodule kann mit folgenden Befehlen hinzugefügt werden. 
+Siehe `.gitmodule` Datei.
 
 ```sh
 git submodule add git@github.com:ulf1/fastapi-evidence-restapi.git restapi
 git submodule add git@github.com:ulf1/psql-evidence-database.git database
 git submodule add git@github.com:ulf1/vue-evidence-app.git webapp
 ```
-
