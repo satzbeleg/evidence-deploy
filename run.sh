@@ -2,13 +2,15 @@
 
 
 # parse Skript Argumente
-while getopts ":s:d:b:f:w:" opt; do 
+while getopts "sdbfw" opt; do 
     case $opt in
         s)
             stop_flag=true
+            ;;
         d)
             delete_flag=true
             stop_flag=true
+            ;;
         b) 
             backend_flag=true
             ;;
@@ -18,8 +20,9 @@ while getopts ":s:d:b:f:w:" opt; do
         w)
             watch_flag=true
             ;;
-        \?) echo "Invalid option -$OPTARG" >&2
-        ;;
+        \?) 
+            echo "Invalid option -$OPTARG" >&2
+            ;;
     esac
 done
 
@@ -41,7 +44,7 @@ if [ "$delete_flag" = true ]; then
     docker network rm evidence-backend-network
     docker network rm evidence-frontend-network
     # tidy up dangling images (general housekeeping)
-    docker rmi $(docker images -f "dangling=true" -q)
+    docker rmi -f $(docker images -f "dangling=true" -q)
 fi
 
 
