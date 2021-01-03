@@ -1,11 +1,8 @@
-# Deploy containers related to the EVIDENCE project 
-- Später muss dass alles durch IaC ersetzt werden (z.B. Ansible) -> Dies ist kein Production Code!
-- Die Bash-Skripte sind ganz nett um local die Container zu starten -> Es ist nur Dev code!
+# EVIDENCE project - Deploy Container
 
 
-## Install
-Die EVIDENCE-Subsysteme (z.B. API, DB, App, Modell) werden in seperaten Repos entwickelt, 
-und hier als submodules eingebunden.
+## Installation
+Die EVIDENCE-Subsysteme (z.B. API, DB, App, Modell) werden in separaten Repositorien entwickelt, und hier als submodules eingebunden.
 
 ```sh
 # Clone the master repo
@@ -17,29 +14,86 @@ git submodule update --init --recursive
 ```
 
 
-## Starte die Container
-Das Skript `start.sh` baut und startet die Container als Hintergrundprozess.
-In der CLI kann wird `docker ps` im Livemodus angezeigt.
+## Starte, Stoppe und Lösche Container
+**TODO**: Ersetze die `run.sh` und `docker-compose` später durch Ansible (IaC).
 
-```sh
-bash start.sh
+
+### Starte DEV Mode
+Das Skript `start.sh` baut und startet die Backend Container (`-b` flag) und Frontend Container (`-f` flag) als Hintergrundprozess.
+In der CLI kann wird `docker ps` im Livemodus angezeigt (`-w` flag).
+
+```bash
+bash run.sh -b -f -w
 ```
 
 Durch Drücken der `[Ctrl+C]` Tastenkombination werden die Container beendet. 
-(Zumindestens sollte es so ein. Bitte checke mit dem `docker ps -a` Befehl.)
+(Bitte checke mit dem `docker ps -a` Befehl.)
 
 
-## Aufräumen
+### Starte Production Mode
+Für den Betrieb sollten die Container einfach gestartet werden.
+
+```bash
+bash run.sh -b -f
+```
+
+
+### Stoppe Container
+Alle Container mit dem Namen `"evidence-*"` werden angehalten.
+(Es wird das Programm `docker` statt `docker-compose` benutzt.)
+
+```bash
+bash run.sh -s
+```
+
+
+### Lösche Container und Images (Tabula Rasa)
 Das Skript `delete.sh` löscht alle `"evidence-*"` Container und auch Images.
+Die Daten (z.B. in Datenbanken) werden ebenfalls gelöscht.
+
+```bash
+bash run.sh -d
+```
 
 
-## git submodules
+## IPs und Ports
 
-### Add another submodule
+
+| Container | Internal IP | Internal Port | Host Port |
+|:---------:|:-----------:|:-------------:|:---------:|
+| `evidence-database` | `172.20.253.5` | `5432` | `55015` |
+| `evidence-pgadmin4` | `172.20.253.6` | `80` | `55016` |
+| `evidence-restapi`  | `172.20.253.7` | `80` | `55017` |
+| `evidence-app`      | `172.20.253.17` | `8080` | `55018` |
+
+
+Internal Port Ranges `evidence-backend-network`
+
+- Internal Port Range `172.20.253.0/28`
+    - Network address: `172.20.253.0`
+    - Broadcast: `172.20.253.15`
+    - Usable: `172.20.253.1-14` (14x)
+- Dynamisch: `172.20.253.8/29`
+- Statisch: `172.20.253.1-7` (7x)
+
+Internal Port Ranges `evidence-frontend-network`
+
+- Internal Port Range `172.20.253.16/29`
+    - Network address: `172.20.253.16`
+    - Broadcast: `172.20.253.23`
+    - Usable: `172.20.253.17-22` (6x)
+- Dynamisch: `172.20.253.20/30` 
+- Statisch: `172.20.253.17-19` (3x)
+
+
+## Anhang
+
+### Git submodule
+Ein Git submodule kann mit folgenden Befehlen hinzugefügt werden. 
+Siehe `.gitmodule` Datei.
 
 ```sh
 git submodule add git@github.com:ulf1/fastapi-evidence-restapi.git restapi
 git submodule add git@github.com:ulf1/psql-evidence-database.git database
 git submodule add git@github.com:ulf1/vue-evidence-app.git webapp
 ```
-
