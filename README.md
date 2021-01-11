@@ -56,6 +56,14 @@ bash run.sh -d
 ```
 
 
+### Logs anschauen
+
+```sh
+tail -f logs/webapp.log
+tail -f logs/restapi.log
+tail -f logs/database.log
+```
+
 ## IPs und Ports
 
 
