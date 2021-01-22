@@ -27,10 +27,14 @@ while getopts "sdbfw" opt; do
 done
 
 
+# logs
+mkdir -p logs
+
+
 # Stoppe Container
 if [ "$stop_flag" = true ]; then
     # Stoppe "evidence-*" container
-    docker ps | grep evidence- | xargs -L1 docker stop
+    docker stop $(docker ps -a --no-trunc --filter="name=evidence-" -q)
 fi
 
 
@@ -45,6 +49,7 @@ if [ "$delete_flag" = true ]; then
     docker network rm evidence-frontend-network
     # tidy up dangling images (general housekeeping)
     docker rmi -f $(docker images -f "dangling=true" -q)
+    docker network prune
 fi
 
 
@@ -64,7 +69,7 @@ if [ "$backend_flag" = true ]; then
     for folder in ${folders[@]}; do
         nohup docker-compose \
             -f "./${folder}/docker-compose.yml" \
-            up --build >/dev/null 2>&1 &
+            up --build > "logs/${folder}.log" 2>&1 &
     done
 fi
 
@@ -72,7 +77,7 @@ fi
 # Frontend Container
 if [ "$frontend_flag" = true ]; then
     # Erzeuge Docker Network
-    if [[ $(docker network ls | grep "evidence-backend-network" | wc -l) -eq 0 ]];
+    if [[ $(docker network ls | grep "evidence-frontend-network" | wc -l) -eq 0 ]];
     then
         docker network create --driver bridge \
             --subnet=172.20.253.16/29 \
@@ -85,7 +90,7 @@ if [ "$frontend_flag" = true ]; then
     for folder in ${folders[@]}; do
         nohup docker-compose \
             -f "./${folder}/docker-compose.yml" \
-            up --build >/dev/null 2>&1 &
+            up --build > "logs/${folder}.log" 2>&1 &
     done
 fi
 
