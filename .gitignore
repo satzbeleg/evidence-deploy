@@ -1,3 +1,5 @@
 vs.code-workspace
 .vscode
 logs
+mytokendata
+.DS_Store
