@@ -13,6 +13,12 @@ cd deploy-evidence
 git submodule update --init --recursive
 ```
 
+## Branches
+* `master` (main branch): Die Submodule sind gegen die Mirror-Repos auf [git.zdl.org](https://git.zdl.org/) ausgelegt, um das Deployment auf BBAW-Server durchzuführen.
+* `dev` -- Development branch für `master` branch. 
+* `prod-gh`: Die Submodule verweisen auf die Github Repos in [@ulf1](https://github.com/ulf1) Benutzerkonto.
+* `dev-gh` -- Development branch für `prod-gh` branch. 
+
 
 ## Starte, Stoppe und Lösche Container
 **TODO**: Ersetze die `run.sh` und `docker-compose` später durch Ansible (IaC).
