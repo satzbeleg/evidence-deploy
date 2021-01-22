@@ -14,10 +14,8 @@ git submodule update --init --recursive
 ```
 
 ## Branches
-* `master` (main branch): Die Submodule sind gegen die Mirror-Repos auf [git.zdl.org](https://git.zdl.org/) ausgelegt, um das Deployment auf BBAW-Server durchzuführen.
+* `master` (main branch): Die Submodule verweisen auf die Github Repos im [@ulf1](https://github.com/ulf1) Benutzerkonto.
 * `dev` -- Development branch für `master` branch. 
-* `prod-gh`: Die Submodule verweisen auf die Github Repos in [@ulf1](https://github.com/ulf1) Benutzerkonto.
-* `dev-gh` -- Development branch für `prod-gh` branch. 
 
 
 ## Starte, Stoppe und Lösche Container
@@ -107,7 +105,7 @@ Ein Git submodule kann mit folgenden Befehlen hinzugefügt werden.
 Siehe `.gitmodule` Datei.
 
 ```sh
-git submodule add git@github.com:ulf1/fastapi-evidence-restapi.git restapi
-git submodule add git@github.com:ulf1/psql-evidence-database.git database
-git submodule add git@github.com:ulf1/vue-evidence-app.git webapp
+git submodule add git@github.com:ulf1/evidence-restapi.git restapi
+git submodule add git@github.com:ulf1/evidence-database.git database
+git submodule add git@github.com:ulf1/evidence-app.git webapp
 ```
