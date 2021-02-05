@@ -21,7 +21,8 @@ nano webapp/.env.local
 
 ```
 NODE_ENV=local
-VUE_APP_API_URL=http://riker.bbaw.de:55017
+#VUE_APP_API_URL=http://riker.bbaw.de:55017
+VUE_APP_API_URL=https://riker.bbaw.de
 ```
 
 ## Branches
