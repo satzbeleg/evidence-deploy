@@ -13,6 +13,17 @@ cd deploy-evidence
 git submodule update --init --recursive
 ```
 
+## .env.local (Setze den API Endpoint)
+
+```sh
+nano webapp/.env.local
+```
+
+```
+NODE_ENV=local
+VUE_APP_API_URL=http://riker.bbaw.de:55017
+```
+
 ## Branches
 * `master` (main branch): Die Submodule verweisen auf die Github Repos im [@ulf1](https://github.com/ulf1) Benutzerkonto.
 * `dev` -- Development branch für `master` branch. 
