@@ -26,7 +26,7 @@ VUE_APP_API_URL=https://riker.bbaw.de
 ```
 
 ## Branches
-* `master` (main branch): Die Submodule verweisen auf die Github Repos im [@ulf1](https://github.com/ulf1) Benutzerkonto.
+* `master` (main branch): Die Submodule verweisen auf die Github Repos im [@satzbeleg](https://github.com/satzbeleg) Benutzerkonto.
 * `dev` -- Development branch für `master` branch. 
 
 
@@ -110,6 +110,25 @@ Internal Port Ranges `evidence-frontend-network`
 - Statisch: `172.20.253.17-19` (3x)
 
 
+## Docker starten
+
+```sh
+# Host Server's Port Settings
+export DATABASE_HOST_PORT=55015
+export PGADMIN_HOST_PORT=55016
+export RESTAPI_HOST_PORT=55017
+export WEBAPP_HOST_PORT=55018
+
+# Postgres Settings
+export POSTGRES_USER=postgres
+export POSTGRES_PASSWORD=password1234   # Please choose
+
+# REST API Settings
+export RESTAPI_NUM_WORKERS=2
+
+docker-compose up
+```
+
 ## Anhang
 
 ### Git submodule
@@ -117,7 +136,7 @@ Ein Git submodule kann mit folgenden Befehlen hinzugefügt werden.
 Siehe `.gitmodule` Datei.
 
 ```sh
-git submodule add git@github.com:ulf1/evidence-restapi.git restapi
-git submodule add git@github.com:ulf1/evidence-database.git database
-git submodule add git@github.com:ulf1/evidence-app.git webapp
+git submodule add git@github.com:satzbeleg/evidence-restapi.git restapi
+git submodule add git@github.com:satzbeleg/evidence-database.git database
+git submodule add git@github.com:satzbeleg/evidence-app.git webapp
 ```
