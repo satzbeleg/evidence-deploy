@@ -121,12 +121,16 @@ export WEBAPP_HOST_PORT=55018
 
 # Postgres Settings
 export POSTGRES_USER=postgres
-export POSTGRES_PASSWORD=password1234   # Please choose
+export POSTGRES_PASSWORD=password1234
+
+# PgAdmin Settings
+export PGADMIN_EMAIL=test@mail.com
+export PGADMIN_PASSWORD=password1234
 
 # REST API Settings
 export RESTAPI_NUM_WORKERS=2
 
-docker-compose up
+docker compose up --build
 ```
 
 ## Anhang

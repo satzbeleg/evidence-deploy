@@ -10,25 +10,39 @@ services:
     ports:
       - "${DATABASE_HOST_PORT}:5432"   # 55015
     volumes: 
-      - ./psql-setup/:/docker-entrypoint-initdb.d/
+      - ./database/psql-setup/:/docker-entrypoint-initdb.d/
     networks:
       evidence-backend-network:
         ipv4_address: 172.20.253.5
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        #window: 300s
   
+  # see https://www.pgadmin.org/docs/pgadmin4/development/container_deployment.html
   evidence-pgadmin4:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: test@mail.com
-      PGADMIN_DEFAULT_PASSWORD: password1234
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "${PGADMIN_HOST_PORT}:80"   # 55016
     networks:
       evidence-backend-network:
         ipv4_address: 172.20.253.6
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        #window: 300s
+    depends_on: [ evidence-database ]
 
   evidence-restapi:
     build:   # build using Dockfile in this directory
-      context: .
+      context: ./restapi
       dockerfile: Dockerfile
     command: sh -c "gunicorn app.main:app 
                       --bind 0.0.0.0:80 
@@ -45,20 +59,45 @@ services:
     networks:
       evidence-backend-network:
         ipv4_address: 172.20.253.7
-
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        #window: 300s
+    depends_on: [ evidence-database ]
+  
   evidence-app:
     build: 
-      context: .
+      context: ./webapp
       dockerfile: Dockerfile
     ports:
       - "${WEBAPP_HOST_PORT}:8080"  # 55018
     networks:
       evidence-frontend-network:
         ipv4_address: 172.20.253.17
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        #window: 300s
+    depends_on: [ evidence-restapi ]
 
 networks:
   evidence-frontend-network:
-    external: true
-    evidence-backend-network:
-      external: true
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.253.16/29
+          ip_range: 172.20.253.20/30
+    
+  evidence-backend-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.253.0/28
+          ip_range: 172.20.253.8/29
   
