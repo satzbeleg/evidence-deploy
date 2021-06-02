@@ -2,6 +2,7 @@ version: '3'
 
 services:
   evidence-database:
+    container_name: evidence-database
     image: citusdata/citus:9.4-alpine
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
@@ -23,6 +24,7 @@ services:
   
   # see https://www.pgadmin.org/docs/pgadmin4/development/container_deployment.html
   evidence-pgadmin4:
+    container_name: evidence-pgadmin4
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
@@ -41,6 +43,7 @@ services:
     depends_on: [ evidence-database ]
 
   evidence-restapi:
+    container_name: evidence-restapi
     build:   # build using Dockfile in this directory
       context: ./restapi
       dockerfile: Dockerfile
@@ -67,7 +70,8 @@ services:
         #window: 300s
     depends_on: [ evidence-database ]
   
-  evidence-app:
+  evidence-webapp:
+    container_name: evidence-webapp
     build: 
       context: ./webapp
       dockerfile: Dockerfile
@@ -86,6 +90,7 @@ services:
 
 networks:
   evidence-frontend-network:
+    name: evidence-frontend-network
     driver: bridge
     ipam:
       driver: default
@@ -94,6 +99,7 @@ networks:
           ip_range: 172.20.253.20/30
     
   evidence-backend-network:
+    name: evidence-backend-network
     driver: bridge
     ipam:
       driver: default
