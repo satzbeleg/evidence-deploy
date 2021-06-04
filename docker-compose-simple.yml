@@ -1,19 +1,15 @@
 version: '3'
 
 services:
-  # see https://github.com/citusdata/docker/blob/master/docker-compose.yml
-  master:
-    container_name: "evidence-database_master"
-    image: 'citusdata/citus:10.0.3'
-    labels: ['com.citusdata.role=Master']
-    environment: &AUTH
-      POSTGRES_USER: "${POSTGRES_USER:-postgres}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      PGUSER: "${POSTGRES_USER:-postgres}"
-      PGPASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_HOST_AUTH_METHOD: "${POSTGRES_HOST_AUTH_METHOD:-trust}"
+  evidence-database:
+    container_name: evidence-database
+    image: citusdata/citus:10.0-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
-      - "${DATABASE_HOST_PORT:-5432}:5432"   # 55015
+      - "${DATABASE_HOST_PORT}:5432"   # 55015
     volumes: 
       - ${POSTGRES_DATA}:/var/lib/postgresql/data   # Persistent on SSD/HDD
       - ./database/psql-setup/:/docker-entrypoint-initdb.d/   # installation scripts
@@ -26,35 +22,7 @@ services:
         delay: 10s
         max_attempts: 5
         #window: 300s
-
-  worker:
-    image: 'citusdata/citus:10.0.3'
-    labels: ['com.citusdata.role=Worker']
-    depends_on: [ manager ]
-    environment: *AUTH
-    command: "/wait-for-manager.sh"
-    volumes: 
-      - healthcheck-volume:/healthcheck
-    networks: [ evidence-backend-network ]  # dynamic IPs!
   
-  manager:
-    container_name: "evidence-database_manager"
-    image: 'citusdata/membership-manager:0.3.0'
-    volumes: 
-      - "${DATABASE_DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock"
-      - healthcheck-volume:/healthcheck
-    depends_on: [ master ]
-    environment: *AUTH
-    networks:
-      evidence-backend-network:
-        ipv4_address: 172.20.253.4
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 5
-        #window: 300s
-
   # see https://www.pgadmin.org/docs/pgadmin4/development/container_deployment.html
   evidence-pgadmin4:
     container_name: evidence-pgadmin4
@@ -73,7 +41,7 @@ services:
         delay: 10s
         max_attempts: 5
         #window: 300s
-    depends_on: [ manager ]
+    depends_on: [ evidence-database ]
 
   evidence-restapi:
     container_name: evidence-restapi
@@ -101,7 +69,7 @@ services:
         delay: 10s
         max_attempts: 5
         #window: 300s
-    depends_on: [ manager ]
+    depends_on: [ evidence-database ]
   
   evidence-webapp:
     container_name: evidence-webapp
@@ -120,9 +88,6 @@ services:
         max_attempts: 5
         #window: 300s
     depends_on: [ evidence-restapi ]
-
-volumes:
-  healthcheck-volume:  # for citus worker and manager
 
 networks:
   evidence-frontend-network:

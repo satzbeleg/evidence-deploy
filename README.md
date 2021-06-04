@@ -35,7 +35,9 @@ VUE_APP_API_URL=https://riker.bbaw.de
 
 | Container | Internal IP | Internal Port | Host Port |
 |:---------:|:-----------:|:-------------:|:---------:|
-| `evidence-database` | `172.20.253.5` | `5432` | `55015` |
+| `evidence-database_manager` | `172.20.253.4` | --- | --- |
+| `evidence-database_master` | `172.20.253.5` | `5432` | `55015` |
+| `evidence-database_worker_#` | `172.20.253.9-14` (dynamisch) | --- | --- |
 | `evidence-pgadmin4` | `172.20.253.6` | `80` | `55016` |
 | `evidence-restapi`  | `172.20.253.7` | `80` | `55017` |
 | `evidence-app`      | `172.20.253.17` | `8080` | `55018` |
@@ -72,6 +74,9 @@ export WEBAPP_HOST_PORT=55018
 # Postgres Settings
 export POSTGRES_USER=postgres
 export POSTGRES_PASSWORD=password1234
+# Persistent Storage
+mkdir -p tmp/data
+export POSTGRES_DATA=./tmp/data
 
 # PgAdmin Settings
 export PGADMIN_EMAIL=test@mail.com
@@ -80,7 +85,9 @@ export PGADMIN_PASSWORD=password1234
 # REST API Settings
 export RESTAPI_NUM_WORKERS=2
 
-docker compose up --build
+docker compose -p evidence up --build 
+docker-compose -p evidence scale worker=2
+#docker compose -p evidence rm
 ```
 
 ## Anhang
