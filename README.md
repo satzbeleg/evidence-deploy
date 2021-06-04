@@ -14,7 +14,7 @@ git submodule update --init --recursive
 ```
 
 ## .env.local (Setze den API Endpoint)
-Die WebApp ist am Ende unter eine öffentliche IP-Adresse erreichbar (In diesem Beispiel `evidence.bbaw.de`). Der Port des Hostservers (z.B. `localhost:55018`; Siehe unten) kann an einen SSL-Server weitergeleitet werden, der die gewünschte Subdomain und Port zuordnet (z.B. `evidence.bbaw.de:443` bzw. `https://evidence.bbaw.de`).
+Die REST API muss für die WebApp konfiguriert werden.
 
 ```sh
 nano webapp/.env.local
@@ -22,7 +22,7 @@ nano webapp/.env.local
 
 ```
 NODE_ENV=local
-VUE_APP_API_URL=evidence.bbaw.de
+RESTAPI_URL=evidence.bbaw.de
 ```
 
 ## Branches
