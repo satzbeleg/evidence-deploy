@@ -1,0 +1,110 @@
+version: '3'
+
+services:
+  evidence-database:
+    container_name: evidence-database
+    image: citusdata/citus:10.0-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "${DATABASE_HOST_PORT}:5432"   # 55015
+    volumes: 
+      - ${POSTGRES_DATA}:/var/lib/postgresql/data   # Persistent on SSD/HDD
+      - ./database/psql-setup/:/docker-entrypoint-initdb.d/   # installation scripts
+    networks:
+      evidence-backend-network:
+        ipv4_address: 172.20.253.5
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        #window: 300s
+  
+  # see https://www.pgadmin.org/docs/pgadmin4/development/container_deployment.html
+  evidence-pgadmin4:
+    container_name: evidence-pgadmin4
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "${PGADMIN_HOST_PORT}:80"   # 55016
+    networks:
+      evidence-backend-network:
+        ipv4_address: 172.20.253.6
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        #window: 300s
+    depends_on: [ evidence-database ]
+
+  evidence-restapi:
+    container_name: evidence-restapi
+    build:   # build using Dockfile in this directory
+      context: ./restapi
+      dockerfile: Dockerfile
+    command: sh -c "gunicorn app.main:app 
+                      --bind 0.0.0.0:80 
+                      --worker-class uvicorn.workers.UvicornH11Worker 
+                      --workers ${RESTAPI_NUM_WORKERS}
+                      --worker-tmp-dir /dev/shm"
+    ports:
+      - "${RESTAPI_HOST_PORT}:80"
+    environment:
+      - EV_PSQL_HOST=172.20.253.5
+      - EV_PSQL_PORT=5432
+      - EV_PSQL_USERNAME=${POSTGRES_USER}
+      - EV_PSQL_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      evidence-backend-network:
+        ipv4_address: 172.20.253.7
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        #window: 300s
+    depends_on: [ evidence-database ]
+  
+  evidence-webapp:
+    container_name: evidence-webapp
+    build: 
+      context: ./webapp
+      dockerfile: Dockerfile
+    ports:
+      - "${WEBAPP_HOST_PORT}:8080"  # 55018
+    networks:
+      evidence-frontend-network:
+        ipv4_address: 172.20.253.17
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        #window: 300s
+    depends_on: [ evidence-restapi ]
+
+networks:
+  evidence-frontend-network:
+    name: evidence-frontend-network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.253.16/29
+          ip_range: 172.20.253.20/30
+    
+  evidence-backend-network:
+    name: evidence-backend-network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.253.0/28
+          ip_range: 172.20.253.8/29
+  
