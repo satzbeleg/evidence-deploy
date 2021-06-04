@@ -14,7 +14,7 @@ git submodule update --init --recursive
 ```
 
 ## .env.local (Setze den API Endpoint)
-Die WebApp ist am Ende unter eine öffentliche IP-Adresse erreichbar (In diesem Beispiel `evidence.bbaw.de`). Die interne Addresse und Port (z.B. `localhost:55018`; Siehe unten) kann an einen SSL-Server weitergeleitet werden, der die gewünschte Subdomain und Port zuordnet (z.B. `evidence.bbaw.de:443` bzw. `https://evidence.bbaw.de`).
+Die WebApp ist am Ende unter eine öffentliche IP-Adresse erreichbar (In diesem Beispiel `evidence.bbaw.de`). Der Port des Hostservers (z.B. `localhost:55018`; Siehe unten) kann an einen SSL-Server weitergeleitet werden, der die gewünschte Subdomain und Port zuordnet (z.B. `evidence.bbaw.de:443` bzw. `https://evidence.bbaw.de`).
 
 ```sh
 nano webapp/.env.local
@@ -32,8 +32,7 @@ VUE_APP_API_URL=evidence.bbaw.de
 
 ## IPs und Ports
 
-
-| Container | Internal IP | Internal Port | Host Port |
+| Container | Docker IP | Docker Port | Host Port |
 |:---------:|:-----------:|:-------------:|:---------:|
 | `evidence-database_manager` | `172.20.253.4` | --- | --- |
 | `evidence-database_master` | `172.20.253.5` | `5432` | `55015` |
@@ -43,18 +42,18 @@ VUE_APP_API_URL=evidence.bbaw.de
 | `evidence-app`      | `172.20.253.17` | `8080` | `55018` |
 
 
-Internal Port Ranges `evidence-backend-network`
+Docker Port Ranges `evidence-backend-network`
 
-- Internal Port Range `172.20.253.0/28`
+- Docker Port Range `172.20.253.0/28`
     - Network address: `172.20.253.0`
     - Broadcast: `172.20.253.15`
     - Usable: `172.20.253.1-14` (14x)
 - Dynamisch: `172.20.253.8/29`
 - Statisch: `172.20.253.1-7` (7x)
 
-Internal Port Ranges `evidence-frontend-network`
+Docker Port Ranges `evidence-frontend-network`
 
-- Internal Port Range `172.20.253.16/29`
+- Docker Port Range `172.20.253.16/29`
     - Network address: `172.20.253.16`
     - Broadcast: `172.20.253.23`
     - Usable: `172.20.253.17-22` (6x)
