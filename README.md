@@ -14,6 +14,7 @@ git submodule update --init --recursive
 ```
 
 ## .env.local (Setze den API Endpoint)
+Die WebApp ist am Ende unter eine öffentliche IP-Adresse erreichbar (In diesem Beispiel `evidence.bbaw.de`). Die interne Addresse und Port (z.B. `localhost:55018`; Siehe unten) kann an einen SSL-Server weitergeleitet werden, der die gewünschte Subdomain und Port zuordnet (z.B. `evidence.bbaw.de:443` bzw. `https://evidence.bbaw.de`).
 
 ```sh
 nano webapp/.env.local
@@ -21,13 +22,12 @@ nano webapp/.env.local
 
 ```
 NODE_ENV=local
-#VUE_APP_API_URL=http://riker.bbaw.de:55017
-VUE_APP_API_URL=https://riker.bbaw.de
+VUE_APP_API_URL=evidence.bbaw.de
 ```
 
 ## Branches
-* `master` (main branch): Die Submodule verweisen auf die Github Repos im [@satzbeleg](https://github.com/satzbeleg) Benutzerkonto.
-* `dev` -- Development branch für `master` branch. 
+* `main` (main branch): Die Submodule verweisen auf die Github Repos im [@satzbeleg](https://github.com/satzbeleg) Benutzerkonto.
+* `dev` -- Development branch für `main` branch. 
 
 
 ## IPs und Ports
