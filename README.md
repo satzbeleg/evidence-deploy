@@ -34,48 +34,45 @@ RESTAPI_URL=evidence.bbaw.de
 
 | Container | Docker IP | Docker Port | Host Port |
 |:---------:|:-----------:|:-------------:|:---------:|
-| `evidence-database_manager` | `172.20.253.4` | --- | --- |
-| `evidence-database_master` | `172.20.253.5` | `5432` | `55015` |
-| `evidence-database_worker_#` | `172.20.253.9-14` (dynamisch) | --- | --- |
+| `evidence-app`      | `172.20.253.1` | `8080` | `55018` |
+| `evidence-restapi`  | `172.20.253.2` | `80` | `55017` |
+| `evidence-dbappl_manager` | `172.20.253.4` | --- | --- |
+| `evidence-dbappl_master` | `172.20.253.5` | `5432` | `55015` |
+| `evidence-dbappl_worker_#` | `172.20.253.129-254` (dynamisch) | --- | --- |
 | `evidence-pgadmin4` | `172.20.253.6` | `80` | `55016` |
-| `evidence-restapi`  | `172.20.253.7` | `80` | `55017` |
-| `evidence-app`      | `172.20.253.17` | `8080` | `55018` |
+| `evidence-dbuser` | `172.20.253.7` | `5432` | `55014` |
 
 
-Docker Port Ranges `evidence-backend-network`
+Docker Port Ranges `evidence-network`
 
-- Docker Port Range `172.20.253.0/28`
+- Docker Port Range `172.20.253.0/24`
     - Network address: `172.20.253.0`
-    - Broadcast: `172.20.253.15`
-    - Usable: `172.20.253.1-14` (14x)
-- Dynamisch: `172.20.253.8/29`
-- Statisch: `172.20.253.1-7` (7x)
+    - Broadcast: `172.20.253.255`
+    - Usable: `172.20.253.1-254` (254x)
+- Dynamisch: `172.20.253.129-254` (126x)
 
-Docker Port Ranges `evidence-frontend-network`
 
-- Docker Port Range `172.20.253.16/29`
-    - Network address: `172.20.253.16`
-    - Broadcast: `172.20.253.23`
-    - Usable: `172.20.253.17-22` (6x)
-- Dynamisch: `172.20.253.20/30` 
-- Statisch: `172.20.253.17-19` (3x)
 
 
 ## Docker starten
 
 ```sh
 # Host Server's Port Settings
-export DATABASE_HOST_PORT=55015
-export PGADMIN_HOST_PORT=55016
-export RESTAPI_HOST_PORT=55017
-export WEBAPP_HOST_PORT=55018
+export DBUSER_HOSTPORT=55014
+export DBAPPL_HOSTPORT=55015
+export PGADMIN_HOSTPORT=55016
+export RESTAPI_HOSTPORT=55017
+export WEBAPP_HOSTPORT=55018
+
 
 # Postgres Settings
-export POSTGRES_USER=postgres
-export POSTGRES_PASSWORD=password1234
+export DBAPPL_PASSWORD=password1234
+export DBUSER_PASSWORD=password1234
 # Persistent Storage
-mkdir -p tmp/data
-export POSTGRES_DATA=./tmp/data
+#rm -rf tmp
+mkdir -p tmp/{data_evidence,data_userdb}
+export DBAPPL_PERSISTENT=./tmp/data_evidence
+export DBUSER_PERSISTENT=./tmp/data_userdb
 
 # PgAdmin Settings
 export PGADMIN_EMAIL=test@mail.com
@@ -84,9 +81,21 @@ export PGADMIN_PASSWORD=password1234
 # REST API Settings
 export RESTAPI_NUM_WORKERS=2
 
-docker compose -p evidence up --build 
+# Subproject folders
+export RESTAPI_PATH=./restapi
+export WEBAPP_PATH=./webapp
+export DATABASE_PATH=./database
+
+docker compose -p evidence -f network.yml \
+    -f ${DATABASE_PATH}/dbappl.yml \
+    -f ${DATABASE_PATH}/dbuser.yml \
+    -f ${DATABASE_PATH}/pgadmin.yml \
+    -f ${RESTAPI_PATH}/restapi.yml \
+    -f ${WEBAPP_PATH}/webapp.yml \
+    up --build
+
+# for dbappl.yml
 docker-compose -p evidence scale worker=2
-#docker compose -p evidence rm
 ```
 
 ## Anhang
