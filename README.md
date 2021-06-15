@@ -40,7 +40,7 @@ RESTAPI_URL=evidence.bbaw.de
 | `evidence-dbappl_master` | `172.20.253.5` | `5432` | `55015` |
 | `evidence-dbappl_worker_#` | `172.20.253.129-254` (dynamisch) | --- | --- |
 | `evidence-pgadmin4` | `172.20.253.6` | `80` | `55016` |
-| `evidence-dbuser` | `172.20.253.7` | `5432` | `55014` |
+| `evidence-dbauth` | `172.20.253.7` | `5432` | `55014` |
 
 
 Docker Port Ranges `evidence-network`
@@ -58,7 +58,7 @@ Docker Port Ranges `evidence-network`
 
 ```sh
 # Host Server's Port Settings
-export DBUSER_HOSTPORT=55014
+export DBAUTH_HOSTPORT=55014
 export DBAPPL_HOSTPORT=55015
 export PGADMIN_HOSTPORT=55016
 export RESTAPI_HOSTPORT=55017
@@ -67,12 +67,12 @@ export WEBAPP_HOSTPORT=55018
 
 # Postgres Settings
 export DBAPPL_PASSWORD=password1234
-export DBUSER_PASSWORD=password1234
+export DBAUTH_PASSWORD=password1234
 # Persistent Storage
 #rm -rf tmp
 mkdir -p tmp/{data_evidence,data_userdb}
 export DBAPPL_PERSISTENT=./tmp/data_evidence
-export DBUSER_PERSISTENT=./tmp/data_userdb
+export DBAUTH_PERSISTENT=./tmp/data_userdb
 
 # PgAdmin Settings
 export PGADMIN_EMAIL=test@mail.com
@@ -88,7 +88,7 @@ export DATABASE_PATH=./database
 
 docker compose -p evidence -f network.yml \
     -f ${DATABASE_PATH}/dbappl.yml \
-    -f ${DATABASE_PATH}/dbuser.yml \
+    -f ${DATABASE_PATH}/dbauth.yml \
     -f ${DATABASE_PATH}/pgadmin.yml \
     -f ${RESTAPI_PATH}/restapi.yml \
     -f ${WEBAPP_PATH}/webapp.yml \
