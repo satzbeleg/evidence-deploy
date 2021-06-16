@@ -80,6 +80,8 @@ export PGADMIN_PASSWORD=password1234
 
 # REST API Settings
 export RESTAPI_NUM_WORKERS=2
+export RESTAPI_SECRET_KEY=$(openssl rand -hex 32)
+export RESTAPI_TOKEN_EXPIRY=1440  # in minutes
 
 # Subproject folders
 export RESTAPI_PATH=./restapi
