@@ -57,38 +57,14 @@ Docker Port Ranges `evidence-network`
 ## Docker starten
 
 ```sh
-# Host Server's Port Settings
-export DBAUTH_HOSTPORT=55014
-export DBAPPL_HOSTPORT=55015
-export PGADMIN_HOSTPORT=55016
-export RESTAPI_HOSTPORT=55017
-export WEBAPP_HOSTPORT=55018
+# load environment variables
+set -a
+source example.env.sh
+source secret.env.sh
 
-
-# Postgres Settings
-export DBAPPL_PASSWORD=password1234
-export DBAUTH_PASSWORD=password1234
-# Persistent Storage
-#rm -rf tmp
-mkdir -p tmp/{data_evidence,data_userdb}
-export DBAPPL_PERSISTENT=./tmp/data_evidence
-export DBAUTH_PERSISTENT=./tmp/data_userdb
-
-# PgAdmin Settings
-export PGADMIN_EMAIL=test@mail.com
-export PGADMIN_PASSWORD=password1234
-
-# REST API Settings
-export RESTAPI_NUM_WORKERS=2
-export RESTAPI_SECRET_KEY=$(openssl rand -hex 32)
-export RESTAPI_TOKEN_EXPIRY=1440  # in minutes
-
-# Subproject folders
-export RESTAPI_PATH=./restapi
-export WEBAPP_PATH=./webapp
-export DATABASE_PATH=./database
-
-docker compose -p evidence -f network.yml \
+# Start containers
+# - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
+docker-compose -p evidence -f network.yml \
     -f ${DATABASE_PATH}/dbappl.yml \
     -f ${DATABASE_PATH}/dbauth.yml \
     -f ${DATABASE_PATH}/pgadmin.yml \
@@ -99,6 +75,7 @@ docker compose -p evidence -f network.yml \
 # for dbappl.yml
 docker-compose -p evidence scale worker=2
 ```
+
 
 ## Anhang
 
