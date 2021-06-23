@@ -68,4 +68,9 @@ export VERIFY_PUBLIC_URL="http://localhost:${RESTAPI_HOSTPORT}"
 # - see webapp/webapp.yml
 # - Already specified above: WEBAPP_PATH, WEBAPP_HOSTPORT
 export REST_PUBLIC_URL="http://localhost:${RESTAPI_HOSTPORT}"
-#export REST_PUBLIC_URL="https://${PUBLIC_DOMAIN}:${RESTAPI_HOSTPORT}"
+#export REST_PUBLIC_URL="https://${PUBLIC_DOMAIN}:${RESTAPI_HOSTPORT}/#/"
+
+
+# Google OAuth 2.0 Client IDs (Web)
+export GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
+
