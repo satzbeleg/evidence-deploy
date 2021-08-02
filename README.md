@@ -1,8 +1,15 @@
 # EVIDENCE project - Deploy Container
+This repository integrates the WebApp, REST API and databases as git submodules,
+and builds all required Docker containers to deploy the EVDIENCE WebApp with its backend.
 
 
 ## Installation
-Die EVIDENCE-Subsysteme (z.B. API, DB, App, Modell) werden in separaten Repositorien entwickelt, und hier als submodules eingebunden.
+1. [Download the Code](#)
+2. [](#)
+
+
+### Download the Code
+The EVIDENCE subsystems (e.g. API, DB, app, model) are developed in separate repositories and integrated here as git submodules. First, clone the repository `satzbeleg/deploy-evidence` and enter the folder. Finally, pull the git submodules.
 
 ```sh
 # Clone the master repo
@@ -13,7 +20,7 @@ cd evidence-deploy
 git submodule update --init --recursive
 ```
 
-## .env.local (Setze den API Endpoint)
+### Customize Settings
 Die REST API muss für die WebApp konfiguriert werden.
 
 ```sh
@@ -24,6 +31,32 @@ nano webapp/.env.local
 NODE_ENV=local
 RESTAPI_URL=evidence.bbaw.de
 ```
+
+
+### Build Docker Containers
+
+```sh
+# load environment variables
+set -a
+source defaults.env.sh
+source specific.env.sh
+
+# Start containers
+# - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
+docker-compose -p evidence -f network.yml \
+    -f ${DATABASE_PATH}/dbappl.yml \
+    -f ${DATABASE_PATH}/dbauth.yml \
+    -f ${DATABASE_PATH}/pgadmin.yml \
+    -f ${RESTAPI_PATH}/restapi.yml \
+    -f ${WEBAPP_PATH}/webapp.yml \
+    up --build
+
+# for dbappl.yml
+docker-compose -p evidence scale worker=2
+```
+
+
+
 
 ## Branches
 * `main` (main branch): Die Submodule verweisen auf die Github Repos im [@satzbeleg](https://github.com/satzbeleg) Benutzerkonto.
@@ -54,27 +87,7 @@ Docker Port Ranges `evidence-network`
 
 
 
-## Docker starten
 
-```sh
-# load environment variables
-set -a
-source example.env.sh
-source secret.env.sh
-
-# Start containers
-# - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
-docker-compose -p evidence -f network.yml \
-    -f ${DATABASE_PATH}/dbappl.yml \
-    -f ${DATABASE_PATH}/dbauth.yml \
-    -f ${DATABASE_PATH}/pgadmin.yml \
-    -f ${RESTAPI_PATH}/restapi.yml \
-    -f ${WEBAPP_PATH}/webapp.yml \
-    up --build
-
-# for dbappl.yml
-docker-compose -p evidence scale worker=2
-```
 
 
 ## Anhang
