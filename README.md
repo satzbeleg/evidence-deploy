@@ -8,7 +8,7 @@ Die EVIDENCE-Subsysteme (z.B. API, DB, App, Modell) werden in separaten Reposito
 # Clone the master repo
 git clone git@github.com:satzbeleg/deploy-evidence.git
 # go to folder
-cd deploy-evidence
+cd evidence-deploy
 # Install given submodules
 git submodule update --init --recursive
 ```
