@@ -4,12 +4,12 @@ and builds all required Docker containers to deploy the EVDIENCE WebApp with its
 
 
 ## Installation
-1. [Download the Code](#)
-2. [](#)
-
+1. [Download the Code](#download-the-code)
+2. [Customize Settings](#customize-settings)
+3. [Build Docker Containers](#build-docker-containers)
 
 ### Download the Code
-The EVIDENCE subsystems (e.g. API, DB, app, model) are developed in separate repositories and integrated here as git submodules. First, clone the repository `satzbeleg/deploy-evidence` and enter the folder. Finally, pull the git submodules.
+The EVIDENCE subsystems (e.g. [API](https://github.com/satzbeleg/evidence-restapi), [DB](https://github.com/satzbeleg/evidence-database), [app](https://github.com/satzbeleg/evidence-app)) are developed in separate repositories and integrated here as git submodules. First, clone the repository `satzbeleg/deploy-evidence` and enter the folder. Finally, pull the git submodules.
 
 ```sh
 # Clone the master repo
@@ -20,16 +20,13 @@ cd evidence-deploy
 git submodule update --init --recursive
 ```
 
+
 ### Customize Settings
-Die REST API muss für die WebApp konfiguriert werden.
+Create a file `specific.env.sh` and change settings according to your deployment scenario.
 
 ```sh
-nano webapp/.env.local
-```
-
-```
-NODE_ENV=local
-RESTAPI_URL=evidence.bbaw.de
+cp defaults.env.sh specific.env.sh
+nano specific.env.sh
 ```
 
 
@@ -57,47 +54,54 @@ docker-compose -p evidence scale worker=2
 
 
 
+## Appendix
 
-## Branches
-* `main` (main branch): Die Submodule verweisen auf die Github Repos im [@satzbeleg](https://github.com/satzbeleg) Benutzerkonto.
-* `dev` -- Development branch für `main` branch. 
-
-
-## IPs und Ports
-
-| Container | Docker IP | Docker Port | Host Port |
-|:---------:|:-----------:|:-------------:|:---------:|
-| `evidence-app`      | `172.20.253.1` | `8080` | `55018` |
-| `evidence-restapi`  | `172.20.253.2` | `80` | `55017` |
-| `evidence-dbappl_manager` | `172.20.253.4` | --- | --- |
-| `evidence-dbappl_master` | `172.20.253.5` | `5432` | `55015` |
-| `evidence-dbappl_worker_#` | `172.20.253.129-254` (dynamisch) | --- | --- |
-| `evidence-pgadmin4` | `172.20.253.6` | `80` | `55016` |
-| `evidence-dbauth` | `172.20.253.7` | `5432` | `55014` |
-
-
-Docker Port Ranges `evidence-network`
+### `network.yml` -- Docker Network
+The docker network `evidence-network` will occupy the following port ranges within the docker subnets.
 
 - Docker Port Range `172.20.253.0/24`
     - Network address: `172.20.253.0`
     - Broadcast: `172.20.253.255`
     - Usable: `172.20.253.1-254` (254x)
-- Dynamisch: `172.20.253.129-254` (126x)
+- Dynamic: `172.20.253.129-254` (126x)
 
 
 
+### `specific.env.sh` -- Host Ports
+The docker IP and ports of each container are mapped to a host port.
+You can set the desired host ports to your needs.
 
 
+| Container | Docker IP | Docker Port | Host Port | `specific.env.sh` |
+|:---------:|:-----------:|:-------------:|:---------:|:---------:|
+| `evidence-app`      | `172.20.253.1` | `8080` | `55018` | `WEBAPP_HOSTPORT` |
+| `evidence-restapi`  | `172.20.253.2` | `80` | `55017` | `RESTAPI_HOSTPORT` |
+| `evidence-dbappl_manager` | `172.20.253.4` | --- | --- | |
+| `evidence-dbappl_master` | `172.20.253.5` | `5432` | `55015` | `DBAPPL_HOSTPORT` |
+| `evidence-dbappl_worker_#` | `172.20.253.129-254` (dynamic) | --- | --- | |
+| `evidence-pgadmin4` | `172.20.253.6` | `80` | `55016` | `PGADMIN_HOSTPORT` |
+| `evidence-dbauth` | `172.20.253.7` | `5432` | `55014` | `DBAUTH_HOSTPORT` |
 
 
-## Anhang
-
-### Git submodule
-Ein Git submodule kann mit folgenden Befehlen hinzugefügt werden. 
-Siehe `.gitmodule` Datei.
+### Submodules
+A Git submodule can be added with the following commands.
+See `.gitmodule` file.
 
 ```sh
 git submodule add git@github.com:satzbeleg/evidence-restapi.git restapi
 git submodule add git@github.com:satzbeleg/evidence-database.git database
 git submodule add git@github.com:satzbeleg/evidence-app.git webapp
 ```
+
+
+### Branches
+* `main` (main branch): The submodules refer to the Github repos of the organization [@satzbeleg](https://github.com/satzbeleg).
+* `dev` -- Development branch for `main` branch. 
+
+
+## Support
+Please [open an issue](https://github.com/satzbeleg/evidence-deploy/issues/new) for support.
+
+
+## Contributing
+Please contribute using [Github Flow](https://guides.github.com/introduction/flow/). Create a branch, add commits, and [open a pull request](https://github.com/satzbeleg/evidence-deploy/compare/).
