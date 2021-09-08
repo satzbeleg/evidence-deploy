@@ -49,7 +49,7 @@ docker-compose -p evidence -f network.yml \
     up --build
 
 # for dbappl.yml
-docker-compose -p evidence scale worker=2
+docker-compose -p evidence -f network.yml -f ${DATABASE_PATH}/dbappl.yml scale worker=3
 ```
 
 
@@ -99,9 +99,9 @@ git submodule add git@github.com:satzbeleg/evidence-app.git webapp
 * `dev` -- Development branch for `main` branch. 
 
 
-## Support
+### Support
 Please [open an issue](https://github.com/satzbeleg/evidence-deploy/issues/new) for support.
 
 
-## Contributing
+### Contributing
 Please contribute using [Github Flow](https://guides.github.com/introduction/flow/). Create a branch, add commits, and [open a pull request](https://github.com/satzbeleg/evidence-deploy/compare/).
