@@ -1,5 +1,8 @@
 # EVIDENCE project - Deploy Container
-This repository integrates the WebApp, REST API and databases as git submodules,
+
+
+## Purpose
+This repository integrates the [Web App](https://github.com/satzbeleg/evidence-app), [REST API](https://github.com/satzbeleg/evidence-restapi) and [databases](https://github.com/satzbeleg/evidence-database) as git submodules,
 and builds all required Docker containers to deploy the EVDIENCE WebApp with its backend.
 
 
