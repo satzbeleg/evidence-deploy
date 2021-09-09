@@ -5,4 +5,4 @@ mytokendata
 .DS_Store
 tmp
 TODO.md
-secret.env.sh
+specific.env.sh
