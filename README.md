@@ -39,7 +39,7 @@ nano specific.env.sh
 # load environment variables
 set -a
 source defaults.env.sh
-source specific.env.sh
+# source secret.env.sh
 
 # Start containers
 # - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
@@ -53,6 +53,13 @@ docker-compose -p evidence -f network.yml \
 
 # for dbappl.yml
 docker-compose -p evidence -f network.yml -f ${DATABASE_PATH}/dbappl.yml scale worker=3
+```
+
+## Add Demo Toy Data
+```sh
+cat database/dbappl/demo/029-evidence.sql | docker exec -i evidence-dbappl_master psql --username=postgres
+
+cat database/dbauth/demo/019-auth.sql | docker exec -i evidence-dbauth psql --username=postgres
 ```
 
 
