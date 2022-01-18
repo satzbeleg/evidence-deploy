@@ -5,15 +5,13 @@ export RESTAPI_PATH=./restapi
 export WEBAPP_PATH=./webapp
 export DATABASE_PATH=./database
 
+# Host Server's Port Settings
+export RESTAPI_HOSTPORT=55017
+export WEBAPP_HOSTPORT=55018
+
 # Public URLs exposed to the Internet (or Intranet)
 export PUBLIC_DOMAIN=localhost
 #export PUBLIC_DOMAIN=test.example.com
-
-# Host Server's Port Settings
-export DBAUTH_HOSTPORT=55014
-export DBAPPL_HOSTPORT=55015
-export RESTAPI_HOSTPORT=55017
-export WEBAPP_HOSTPORT=55018
 
 # Application Database (DB, API)
 # - see database/dbappl.yml
