@@ -74,7 +74,7 @@ You can set the desired host ports to your needs.
 
 
 | Container | Docker Port | Host Port | `specific.env.sh` |
-|:---------:|:-----------:|:-------------:|:---------:|:---------:|
+|:---------:|:-----------:|:---------:|:---------:|
 | `evidence-app`      | `8080` | `55018` | `WEBAPP_HOSTPORT` |
 | `evidence-restapi`  | `80` | `55017` | `RESTAPI_HOSTPORT` |
 
