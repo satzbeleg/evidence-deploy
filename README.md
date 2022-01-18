@@ -87,10 +87,6 @@ You can set the desired host ports to your needs.
 |:---------:|:-----------:|:-------------:|:---------:|:---------:|
 | `evidence-app`      | `172.20.253.1` | `8080` | `55018` | `WEBAPP_HOSTPORT` |
 | `evidence-restapi`  | `172.20.253.2` | `80` | `55017` | `RESTAPI_HOSTPORT` |
-| `evidence-dbappl_manager` | `172.20.253.4` | --- | --- | |
-| `evidence-dbappl_master` | `172.20.253.5` | `5432` | `55015` | `DBAPPL_HOSTPORT` |
-| `evidence-dbappl_worker_#` | `172.20.253.129-254` (dynamic) | --- | --- | |
-| `evidence-dbauth` | `172.20.253.7` | `5432` | `55014` | `DBAUTH_HOSTPORT` |
 
 
 ### Submodules

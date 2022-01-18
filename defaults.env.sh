@@ -10,8 +10,6 @@ export PUBLIC_DOMAIN=localhost
 #export PUBLIC_DOMAIN=test.example.com
 
 # Host Server's Port Settings
-export DBAUTH_HOSTPORT=55014
-export DBAPPL_HOSTPORT=55015
 export RESTAPI_HOSTPORT=55017
 export WEBAPP_HOSTPORT=55018
 
