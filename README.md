@@ -48,7 +48,6 @@ source specific.env.sh
 docker-compose -p evidence -f network.yml \
     -f ${DATABASE_PATH}/dbappl.yml \
     -f ${DATABASE_PATH}/dbauth.yml \
-    -f ${DATABASE_PATH}/pgadmin.yml \
     -f ${RESTAPI_PATH}/restapi.yml \
     -f ${WEBAPP_PATH}/webapp.yml \
     up --build
@@ -59,9 +58,9 @@ docker-compose -p evidence -f network.yml -f ${DATABASE_PATH}/dbappl.yml scale w
 
 ## Add Demo Toy Data
 ```sh
-cat database/dbappl/demo/029-evidence.sql | docker exec -i evidence-dbappl_master psql --username=postgres
+cat database/dbappl/demo/toy-data-for-app-demo.sql | docker exec -i evidence-dbappl_master psql --username=postgres
 
-cat database/dbauth/demo/019-auth.sql | docker exec -i evidence-dbauth psql --username=postgres
+cat database/dbauth/demo/test-user-for-app-demo.sql | docker exec -i evidence-dbauth psql --username=postgres
 ```
 
 
@@ -91,7 +90,6 @@ You can set the desired host ports to your needs.
 | `evidence-dbappl_manager` | `172.20.253.4` | --- | --- | |
 | `evidence-dbappl_master` | `172.20.253.5` | `5432` | `55015` | `DBAPPL_HOSTPORT` |
 | `evidence-dbappl_worker_#` | `172.20.253.129-254` (dynamic) | --- | --- | |
-| `evidence-pgadmin4` | `172.20.253.6` | `80` | `55016` | `PGADMIN_HOSTPORT` |
 | `evidence-dbauth` | `172.20.253.7` | `5432` | `55014` | `DBAUTH_HOSTPORT` |
 
 
