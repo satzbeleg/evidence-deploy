@@ -41,7 +41,7 @@ nano specific.env.sh
 # load environment variables
 set -a
 source defaults.env.sh
-# source specific.env.sh
+source specific.env.sh
 
 # Start containers
 # - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
