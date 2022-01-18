@@ -1,3 +1,5 @@
+[![Join the chat at https://gitter.im/satzbeleg/community](https://badges.gitter.im/satzbeleg/community.svg)](https://gitter.im/satzbeleg/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 # EVIDENCE project - Deploy Container
 
 
@@ -16,7 +18,7 @@ The EVIDENCE subsystems (e.g. [API](https://github.com/satzbeleg/evidence-restap
 
 ```sh
 # Clone the master repo
-git clone git@github.com:satzbeleg/deploy-evidence.git
+git clone git@github.com:satzbeleg/evidence-deploy.git
 # go to folder
 cd evidence-deploy
 # Install given submodules
@@ -39,7 +41,7 @@ nano specific.env.sh
 # load environment variables
 set -a
 source defaults.env.sh
-# source secret.env.sh
+# source specific.env.sh
 
 # Start containers
 # - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
