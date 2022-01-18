@@ -67,26 +67,16 @@ cat database/dbauth/demo/test-user-for-app-demo.sql | docker exec -i evidence-db
 
 ## Appendix
 
-### `network.yml` -- Docker Network
-The docker network `evidence-network` will occupy the following port ranges within the docker subnets.
-
-- Docker Port Range `172.20.253.0/24`
-    - Network address: `172.20.253.0`
-    - Broadcast: `172.20.253.255`
-    - Usable: `172.20.253.1-254` (254x)
-- Dynamic: `172.20.253.129-254` (126x)
-
-
 
 ### `specific.env.sh` -- Host Ports
 The docker IP and ports of each container are mapped to a host port.
 You can set the desired host ports to your needs.
 
 
-| Container | Docker IP | Docker Port | Host Port | `specific.env.sh` |
+| Container | Docker Port | Host Port | `specific.env.sh` |
 |:---------:|:-----------:|:-------------:|:---------:|:---------:|
-| `evidence-app`      | `172.20.253.1` | `8080` | `55018` | `WEBAPP_HOSTPORT` |
-| `evidence-restapi`  | `172.20.253.2` | `80` | `55017` | `RESTAPI_HOSTPORT` |
+| `evidence-app`      | `8080` | `55018` | `WEBAPP_HOSTPORT` |
+| `evidence-restapi`  | `80` | `55017` | `RESTAPI_HOSTPORT` |
 
 
 ### Submodules
