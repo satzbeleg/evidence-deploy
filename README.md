@@ -10,8 +10,9 @@ and builds all required Docker containers to deploy the EVDIENCE WebApp with its
 
 ## Installation
 1. [Download the Code](#download-the-code)
-2. [Customize Settings](#customize-settings)
-3. [Build Docker Containers](#build-docker-containers)
+1. [Build Docker Containers](#build-docker-containers)
+1. [Backup and Recovery](#backup-and-recovery)
+
 
 ### Download the Code
 The EVIDENCE subsystems (e.g. [API](https://github.com/satzbeleg/evidence-restapi), [DB](https://github.com/satzbeleg/evidence-database), [app](https://github.com/satzbeleg/evidence-app)) are developed in separate repositories and integrated here as git submodules. First, clone the repository `satzbeleg/deploy-evidence` and enter the folder. Finally, pull the git submodules.
@@ -26,57 +27,40 @@ git submodule update --init --recursive
 ```
 
 
-### Customize Settings
-Create a file `specific.env.sh` and change settings according to your deployment scenario.
-
-```sh
-cp defaults.env.sh specific.env.sh
-nano specific.env.sh
-```
-
-
 ### Build Docker Containers
 
 ```sh
-# load environment variables
-set -a
-source defaults.env.sh
-source specific.env.sh
-
-# Start containers
-# - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
-docker-compose -p evidence -f network.yml \
-    -f ${DATABASE_PATH}/dbappl.yml \
-    -f ${DATABASE_PATH}/dbauth.yml \
-    -f ${RESTAPI_PATH}/restapi.yml \
-    -f ${WEBAPP_PATH}/webapp.yml \
-    up --build
-
-# for dbappl.yml
-docker-compose -p evidence -f network.yml -f ${DATABASE_PATH}/dbappl.yml scale worker=3
+docker-compose up --build
 ```
 
-## Add Demo Toy Data
-```sh
-cat database/dbappl/demo/toy-data-for-app-demo.sql | docker exec -i evidence-dbappl_master psql --username=postgres
+Entry URLs:
 
-cat database/dbauth/demo/test-user-for-app-demo.sql | docker exec -i evidence-dbauth psql --username=postgres
+- http://localhost:9090/ (App)
+- http://localhost:8080/v1/docs (API)
+- http://localhost:8025/ (stub SMTP server)
+
+### Backup and Recovery
+The *backup* should be carried out in the database container, i.e. `pg_dump` is executed in the container and the data is forwarded to the host.
+The reason is that the program `pg_dump` on the host might not have to have the same major version as the Postgres database in the container.
+
+```sh
+suffix=$(date +"%Y-%m-%dT%H-%M")
+docker-compose exec db \
+    pg_dump -U evidence evidence \
+    | gzip -9 > "postgres-${suffix}.sql.gz"
+```
+
+For *recovery*, the archive is forwarded from the host to the database container,
+and used as input in the container of `psql`.
+
+```sh
+gunzip -c "postgres-${suffix}.sql.gz" | docker-compose exec -T db \
+   psql -U evidence evidence
 ```
 
 
 
 ## Appendix
-
-
-### `specific.env.sh` -- Host Ports
-The docker IP and ports of each container are mapped to a host port.
-You can set the desired host ports to your needs.
-
-
-| Container | Docker Port | Host Port | `specific.env.sh` |
-|:---------:|:-----------:|:---------:|:---------:|
-| `evidence-app`      | `8080` | `55018` | `WEBAPP_HOSTPORT` |
-| `evidence-restapi`  | `80` | `55017` | `RESTAPI_HOSTPORT` |
 
 
 ### Submodules
