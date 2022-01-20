@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+  mail:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+  db:
+    image: evidence-db
+    build:
+      context: database/
+    ports:
+       - "5432:5432"
+    environment:
+      - "POSTGRES_USER=evidence"
+      - "POSTGRES_PASSWORD=evidence"
+    volumes:
+      - ./database/dbauth/demo/test-user-for-app-demo.sql:/docker-entrypoint-initdb.d/2001-test-user-for-app-demo.sql
+      - ./database/dbappl/demo/toy-data-for-app-demo.sql:/docker-entrypoint-initdb.d/2002-toy-data-for-app-demo.sql
+      - db:/var/lib/postgresql/data
+  api:
+    image: evidence-api
+    build:
+      context: restapi/
+    environment:
+      - "DBAPPL_HOST=db"
+      - "DBAUTH_HOST=db"
+      - "SMTP_SERVER=mail"
+      - "SMTP_PORT=1025"
+      - "ACCESS_SECRET_KEY=acceba8d51a6ee8423447b41ad85d696ca221d01fd1e4031bae6a9118a0f43b6"
+    ports:
+      - "8080:80"
+
+  app:
+    image: evidence-app
+    build:
+      context: webapp/
+    volumes:
+      - ./docker-compose-nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "9090:9090"
+
+volumes:
+  db:
