@@ -10,8 +10,8 @@ and builds all required Docker containers to deploy the EVDIENCE WebApp with its
 
 ## Installation
 1. [Download the Code](#download-the-code)
-1. [Build Docker Containers](#build-docker-containers)
-1. [Backup and Recovery](#backup-and-recovery)
+2. [Build Docker Containers](#build-docker-containers)
+3. [Backup and Recovery](#backup-and-recovery)
 
 
 ### Download the Code
