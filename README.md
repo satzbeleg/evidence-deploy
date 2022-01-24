@@ -39,6 +39,8 @@ Entry URLs:
 - http://localhost:8080/v1/docs (API)
 - http://localhost:8025/ (stub SMTP server)
 
+Please configure your mailer settings, and gunicorn settings for the `api` container.
+
 ### Backup and Recovery
 The *backup* should be carried out in the database container, i.e. `pg_dump` is executed in the container and the data is forwarded to the host.
 The reason is that the program `pg_dump` on the host might not have to have the same major version as the Postgres database in the container.
