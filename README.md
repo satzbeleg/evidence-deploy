@@ -60,6 +60,17 @@ gunzip -c "postgres-${suffix}.sql.gz" | docker-compose exec -T db \
    psql -U evidence evidence
 ```
 
+### Upload Docker Images to Registry
+
+#### Example: ZDL Registry
+First, login 
+```sh
+docker login docker-registry.zdl.org
+```
+Then run this script
+```sh
+python3 scripts/push-images-to-zdl
+```
 
 
 ## Appendix
