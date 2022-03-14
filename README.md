@@ -84,6 +84,10 @@ See `.gitmodule` file.
 git submodule add git@github.com:satzbeleg/evidence-restapi.git restapi
 git submodule add git@github.com:satzbeleg/evidence-database.git database
 git submodule add git@github.com:satzbeleg/evidence-app.git webapp
+git submodule add git@github.com:satzbeleg/simiscore-semantic.git simiscore-semantic
+git submodule add git@github.com:satzbeleg/simiscore-syntax.git simiscore-syntax
+git submodule add git@github.com:satzbeleg/simiscore-kshingle.git simiscore-kshingle
+git submodule add git@github.com:satzbeleg/simiscore-legal.git simiscore-legal
 ```
 
 
