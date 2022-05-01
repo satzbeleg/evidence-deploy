@@ -16,6 +16,6 @@
 [submodule "simiscore-kshingle"]
 	path = simiscore-kshingle
 	url = git@github.com:satzbeleg/simiscore-kshingle.git
-[submodule "simiscore-legal"]
-	path = simiscore-legal
-	url = git@github.com:satzbeleg/simiscore-legal.git
+[submodule "simiscore-biblio"]
+	path = simiscore-biblio
+	url = git@github.com:satzbeleg/simiscore-biblio.git

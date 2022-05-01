@@ -40,6 +40,50 @@ services:
     ports:
       - "8080:80"
 
+  simiscore-biblio:
+    image: evidence-simiscore-biblio
+    build:
+      context: simiscore-biblio/
+      dockerfile: Dockerfile
+    environment:
+      - "WORKERS_PER_CORE=0.5"
+      # - "MAX_WORKERS=2"
+    ports:
+      - "8081:80"
+
+  simiscore-kshingle:
+    image: evidence-simiscore-kshingle
+    build:
+      context: simiscore-kshingle/
+      dockerfile: Dockerfile
+    environment:
+      - "WORKERS_PER_CORE=0.5"
+      # - "MAX_WORKERS=2"
+    ports:
+      - "8082:80"
+
+  simiscore-semantic:
+    image: evidence-simiscore-semantic
+    build:
+      context: simiscore-semantic/
+      dockerfile: Dockerfile
+    environment:
+      - "WORKERS_PER_CORE=0.5"
+      # - "MAX_WORKERS=2"
+    ports:
+      - "8083:80"
+
+  simiscore-syntax:
+    image: evidence-simiscore-syntax
+    build:
+      context: simiscore-syntax/
+      dockerfile: Dockerfile
+    environment:
+      - "WORKERS_PER_CORE=0.5"
+      # - "MAX_WORKERS=2"
+    ports:
+      - "8084:80"
+
   app:
     image: evidence-app
     build:
