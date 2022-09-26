@@ -87,6 +87,7 @@ See `.gitmodule` file.
 git submodule add git@github.com:satzbeleg/evidence-restapi.git restapi
 git submodule add git@github.com:satzbeleg/evidence-database.git database
 git submodule add git@github.com:satzbeleg/evidence-app.git webapp
+git submodule add git@github.com:satzbeleg/evidence-features.git features
 ```
 
 ### Branches
