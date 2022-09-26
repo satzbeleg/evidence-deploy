@@ -7,15 +7,3 @@
 [submodule "webapp"]
 	path = webapp
 	url = git@github.com:satzbeleg/evidence-app.git
-[submodule "simiscore-semantic"]
-	path = simiscore-semantic
-	url = git@github.com:satzbeleg/simiscore-semantic.git
-[submodule "simiscore-syntax"]
-	path = simiscore-syntax
-	url = git@github.com:satzbeleg/simiscore-syntax.git
-[submodule "simiscore-kshingle"]
-	path = simiscore-kshingle
-	url = git@github.com:satzbeleg/simiscore-kshingle.git
-[submodule "simiscore-biblio"]
-	path = simiscore-biblio
-	url = git@github.com:satzbeleg/simiscore-biblio.git
