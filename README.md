@@ -35,9 +35,10 @@ docker-compose up --build
 
 Entry URLs:
 
-- http://localhost:9090/ (App)
-- http://localhost:8080/v1/docs (API)
+- http://localhost:9090/ (Web-App)
+- http://localhost:8080/v1/docs (API for Web-App)
 - http://localhost:8025/ (stub SMTP server)
+
 
 Please configure your mailer settings, and gunicorn settings for the `api` container.
 
@@ -47,7 +48,9 @@ The reason is that the program `pg_dump` on the host might not have to have the 
 
 ```sh
 suffix=$(date +"%Y-%m-%dT%H-%M")
-docker-compose exec db \
+docker exec -it evidence_dbeval bash \
+
+docker-compose exec dbeval \
     pg_dump -U evidence evidence \
     | gzip -9 > "postgres-${suffix}.sql.gz"
 ```
@@ -84,8 +87,8 @@ See `.gitmodule` file.
 git submodule add git@github.com:satzbeleg/evidence-restapi.git restapi
 git submodule add git@github.com:satzbeleg/evidence-database.git database
 git submodule add git@github.com:satzbeleg/evidence-app.git webapp
+git submodule add git@github.com:satzbeleg/evidence-features.git features
 ```
-
 
 ### Branches
 * `main` (main branch): The submodules refer to the Github repos of the organization [@satzbeleg](https://github.com/satzbeleg).
