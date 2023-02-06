@@ -31,6 +31,10 @@ git submodule update --init --recursive
 
 ```sh
 docker-compose up --build
+# docker-compose up --build dbauth dbeval dbeval-install
+# docker-compose up --build dbauth dbeval mail
+# docker-compose up --build dbauth dbeval mail api
+# docker-compose up --build dbauth dbeval mail api app
 ```
 
 Entry URLs:
