@@ -26,6 +26,21 @@ cd evidence-deploy
 git submodule update --init --recursive
 ```
 
+### Add Deployment Specific Configurations
+The Web-App uses environement variables before running `yarn build` (e.g. in the `Dockerfile`).
+In other workds, these environment variables are hardcoded into the Web-App.
+
+- Edit `./webapp/.env` 
+- Set `NODE_ENV=production` to enable the PWA workers
+- Specify the URL of the REST API (`VUE_APP_REST_PUBLIC_URL`)
+- Specify the Google Client ID if you setup User Verfication with GCP (`VUE_APP_GOOGLE_CLIENT_ID`)
+
+The REST API needs an SMTP-Server for the E-Mail based user registration. 
+
+- Edit `./docker-compose.yml`
+- Scroll to the `api` service
+- Edit the ENV variables `SMTP_SERVER`, `SMTP_PORT`, ..., `VERIFY_PUBLIC_URL`
+
 
 ### Build Docker Containers
 
@@ -40,7 +55,7 @@ docker-compose up --build
 Entry URLs:
 
 - http://localhost:9090/ (Web-App)
-- http://localhost:8080/v1/docs (API for Web-App)
+- http://localhost:7070/v1/docs (API for Web-App)
 - http://localhost:8025/ (stub SMTP server)
 
 
@@ -81,6 +96,8 @@ python3 scripts/push-images-to-zdl
 
 
 ## Appendix
+
+### Probleme
 
 
 ### Submodules
