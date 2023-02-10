@@ -14,7 +14,7 @@ version = (Path(__file__) / '..' / 'VERSION').resolve().read_text().strip()
 version = os.environ.get('VERSION', version)
 version = f'{version}.{minor_version.strip()}'
 
-for service in ['db', 'api', 'app']:
+for service in ['dbauth', 'api', 'app']:
     image_tag = f'evidence-{service}:latest'
     release_tag = f'docker-registry.zdl.org/zdl-evidence/{service}:{version}'
     check_call(['docker', 'tag', image_tag, release_tag])
