@@ -13,20 +13,23 @@ services:
     container_name: evidence_dbauth
     build:
       context: database/dbauth/
+    volumes:
+      - ./database/dbauth/demo/test-user.sql:/docker-entrypoint-initdb.d/test-user.sql
     ports:
        - "5432:5432"
+    # network_mode: "host"  # host mode OR port mapping
+    restart: unless-stopped
     environment:
       - "POSTGRES_USER=evidence"
       - "POSTGRES_PASSWORD=evidence"
-    volumes:
-      - ./database/dbauth/demo/test-user.sql:/docker-entrypoint-initdb.d/test-user.sql
 
   dbeval: 
     image: cassandra:4.0
     container_name: evidence_dbeval
     ports:
        - "9042:9042"
-    restart: always
+    # network_mode: "host"  # host mode doesn't work
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "cqlsh", "-u cassandra", "-p cassandra" ,"-e describe keyspaces"]
       interval: 30s
@@ -34,15 +37,24 @@ services:
       retries: 10
     cap_add:
       - SYS_NICE
+    # environment:
+      # see https://hub.docker.com/r/bitnami/cassandra/
 
   api:
     image: evidence-api
     container_name: evidence_api
     build:
       context: restapi/
+    ports:
+      - "7070:80"
+    # network_mode: "host"  # host mode OR port mapping
+    depends_on:
+      - dbauth
+      - dbeval
+    restart: unless-stopped  # very important because CQL takes 3-5 min. to start
     environment:
-      # - "DBEVAL_NODES=dbeval"
-      # - "DBAUTH_HOST=dbauth"
+      - "DBEVAL_NODES=dbeval"
+      - "DBAUTH_HOST=dbauth" 
       - "ACCESS_SECRET_KEY=acceba8d51a6ee8423447b41ad85d696ca221d01fd1e4031bae6a9118a0f43b6"
       # Mailer Settings
       - "SMTP_SERVER=mail"
@@ -50,16 +62,10 @@ services:
       # - "SMTP_TLS="
       # - "SMTP_USER="
       # - "SMTP_PASSWORD="
-      # - "FROM_EMAIL="
+      - "FROM_EMAIL=test@evidence-demo.org"
       # - "VERIFY_PUBLIC_URL=http://mydomain:8080"
       # Fastapi/gunicorn settings, see https://github.com/tiangolo/uvicorn-gunicorn-docker/tree/master#workers_per_core
       - "WORKERS_PER_CORE=0.5"
-      # - "MAX_WORKERS=2"
-    ports:
-      - "7070:80"
-    depends_on:
-      - "dbauth"
-      - "dbeval"
 
   app:
     image: evidence-app
@@ -71,8 +77,13 @@ services:
     ports:
       - "9090:9090"
     depends_on:
-      - "api"
+      - api
+    restart: unless-stopped
 
 volumes:
   dbauth:
   dbeval:
+
+# networks:
+#   default:
+#     driver: bridge
