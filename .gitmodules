@@ -7,6 +7,3 @@
 [submodule "webapp"]
 	path = webapp
 	url = git@github.com:satzbeleg/evidence-app.git
-[submodule "features"]
-	path = features
-	url = git@github.com:satzbeleg/evidence-features.git
