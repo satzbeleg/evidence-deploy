@@ -3,8 +3,11 @@
 ## Warning
 - Cassandra will likely time out when attempting something like `SELECT DISTINCT headword, COUNT(*) ...`
 - The approach is to download the headwords first, what are the CQL partition keys. Afterwards count the rows for each partition. 
+- It is very likely that scripts are still crashing
 
-## Usage
+
+
+## Usage `script.py`
 
 1. Login into database server
 
@@ -28,3 +31,21 @@ nohup python script.py > freq-download.log &
 ```
 scp username@server:~/somewhere/headword-freq.csv headword-freq.csv
 ```
+
+## Usage `script.sh` 
+
+1. Login into database server
+
+2. Set container name
+
+```
+export CQLNAME=zdl_evidence_dbeval
+```
+
+3. Run script
+
+```
+nohup bash script.sh > freq-download.log &
+```
+
+

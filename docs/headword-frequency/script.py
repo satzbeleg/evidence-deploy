@@ -53,7 +53,10 @@ def get_headwords(session: cas.cluster.Session,
     # fetch from CQL
     headwords = []
     for row in session.execute(stmt):
-        headwords.append(row.headword)
+        try:
+            headwords.append(row.headword)
+        except Exception as err:
+            print(err)
     headwords = list(set(headwords))
     # clean up
     del stmt
@@ -64,20 +67,21 @@ def get_headwords(session: cas.cluster.Session,
 
 def get_num_per_headword(session: cas.cluster.Session, 
                          headword: str):
-    # prepare statement
-    stmt = session.prepare(
-        f"SELECT COUNT(sent_id) FROM {session.keyspace}.tbl_features WHERE headword=?;")
-    # fetch from CQL
-    for row in session.execute(stmt, [headword]):
-        try:
+    try:
+        # prepare statement
+        stmt = session.prepare(
+            f"SELECT COUNT(sent_id) FROM {session.keyspace}.tbl_features WHERE headword=?;")
+        # fetch from CQL
+        for row in session.execute(stmt, [headword]):
             num = row.system_count_sent_id
             break
-        except Exception as err:
-            print(err)
-            num = None
-    # clean up
-    del stmt
-    gc.collect()
+    except Exception as err:
+        print(err)
+        num = None
+    finally:
+        # clean up
+        del stmt
+        gc.collect()
     # done
     return num
 
