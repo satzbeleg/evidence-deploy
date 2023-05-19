@@ -48,4 +48,10 @@ export CQLNAME=zdl_evidence_dbeval
 nohup bash script.sh > freq-download.log &
 ```
 
+## Usage `script.sh` (COPY Methode)
+
+```
+nohup bash script2.sh > freq-download2.log &
+```
+
 

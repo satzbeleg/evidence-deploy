@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# export CQLNAME=zdl_evidence_dbeval
+export CQLNAME=zdl_evidence_dbeval
 
 # download all headwords (CQL partition keys)
 docker exec -i $CQLNAME cqlsh --encoding=utf8 --no-color --request-timeout=6000 -e'SELECT DISTINCT headword FROM evidence.tbl_features;' > headwords.txt
