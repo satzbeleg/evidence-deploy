@@ -81,15 +81,15 @@ python3 scripts/push-images-to-zdl
 
 
 
-## Backup and Recovery
+## Backup and Recovery (dbauth)
 The *backup* should be carried out in the database container, i.e. `pg_dump` is executed in the container and the data is forwarded to the host.
 The reason is that the program `pg_dump` on the host might not have to have the same major version as the Postgres database in the container.
 
 ```sh
 suffix=$(date +"%Y-%m-%dT%H-%M")
-docker exec -it evidence_dbeval bash \
+docker exec -it evidence_auth bash \
 
-docker-compose exec dbeval \
+docker-compose exec dbauth \
     pg_dump -U evidence evidence \
     | gzip -9 > "postgres-${suffix}.sql.gz"
 ```
@@ -98,7 +98,7 @@ For *recovery*, the archive is forwarded from the host to the database container
 and used as input in the container of `psql`.
 
 ```sh
-gunzip -c "postgres-${suffix}.sql.gz" | docker-compose exec -T db \
+gunzip -c "postgres-${suffix}.sql.gz" | docker-compose exec -T dbauth \
    psql -U evidence evidence
 ```
 
