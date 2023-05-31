@@ -80,6 +80,27 @@ python3 scripts/push-images-to-zdl
 ```
 
 
+##### Reploy only the Web-App
+Sometimes, minor bugs occur in the Web-App code. 
+It is not necessary to trigger a full redeployment because the Web-App only uses a container to build once, while the built code is served via a NGINX server.
+
+```
+cd webapp
+nvm install 16
+yarn
+yarn build
+scp -r dist username@yourserver.com:~/tmp-evidence-htdocs
+ssh username@yourserver.com
+sudo rm -r yournginxfolder/*
+sudo cp -r ~/tmp-evidence-htdocs/* yournginxfolder/
+rm -r ~/tmp-evidence-htdocs
+exit
+cd ..
+```
+
+(Hint for ZDL: Check `zdl_evidence_data_dir / htdocs` in zdl/ansible repo.)
+
+
 
 ## Backup and Recovery (dbauth)
 The *backup* should be carried out in the database container, i.e. `pg_dump` is executed in the container and the data is forwarded to the host.
