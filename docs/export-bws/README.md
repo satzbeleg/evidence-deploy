@@ -75,4 +75,4 @@ ranked, ordids, metrics, scores, info = bws.rank(
     agg_dok, method='approx')
 ```
 
-
+The plain sentence text is not stored in the table `evidence.evaluated_bestworst` and must be looked up from `evidence.tbl_features`.
